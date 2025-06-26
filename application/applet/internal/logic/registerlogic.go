@@ -3,6 +3,7 @@ package logic
 import (
 	"context"
 	"errors"
+	"posta/application/applet/internal/code"
 	"posta/application/user/rpc/user"
 	"posta/pkg/encrypt"
 	"posta/pkg/jwt"
@@ -34,13 +35,12 @@ func NewRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Register
 }
 
 func (l *RegisterLogic) Register(req *types.RegisterRequest) (*types.RegisterResponse, error) {
+
 	req.Name = strings.TrimSpace(req.Name)
-	if len(req.Name) == 0 {
-		return nil, errors.New("name cannot be empty")
-	}
 	req.Mobile = strings.TrimSpace(req.Mobile)
 	if len(req.Mobile) == 0 {
-		return nil, errors.New("mobile cannot be empty")
+		// 注意：这里使用自定义错误代码
+		return nil, code.RegisterMobileEmpty
 	}
 	req.Password = strings.TrimSpace(req.Password)
 	if len(req.Password) == 0 {
@@ -48,7 +48,7 @@ func (l *RegisterLogic) Register(req *types.RegisterRequest) (*types.RegisterRes
 	}
 	req.VerificationCode = strings.TrimSpace(req.VerificationCode)
 	if len(req.VerificationCode) == 0 {
-		return nil, errors.New("verification code cannot be empty")
+		return nil, code.VerificationCodeEmpty
 	}
 	err := l.checkVerificationCode(l.ctx, req.Mobile, req.VerificationCode)
 	if err != nil {
@@ -67,7 +67,7 @@ func (l *RegisterLogic) Register(req *types.RegisterRequest) (*types.RegisterRes
 		return nil, err
 	}
 	if userRet != nil && userRet.UserId > 0 {
-		return nil, errors.New("this mobile is already registered")
+		return nil, code.MobileHasRegistered
 	}
 	regRet, err := l.svcCtx.UserRPC.Register(l.ctx, &user.RegisterRequest{
 		Username: req.Name,

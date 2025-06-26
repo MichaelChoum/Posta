@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"posta/pkg/interceptors"
 
 	"posta/application/user/rpc/internal/config"
 	"posta/application/user/rpc/internal/server"
@@ -34,6 +35,9 @@ func main() {
 		}
 	})
 	defer s.Stop()
+
+	// 注意：自定义拦截器
+	s.AddUnaryInterceptors(interceptors.ServerErrorInterceptor())
 
 	fmt.Printf("Starting rpc server at %s...\n", c.ListenOn)
 	s.Start()
