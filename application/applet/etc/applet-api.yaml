@@ -7,3 +7,13 @@ Auth:
   RefreshSecret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
   RefreshExpire: 2592000
   RefreshAfter: 604800
+UserRPC:
+  Etcd:
+    Hosts: # 注意：这里的Hosts是一个数组
+      - 127.0.0.1:2379
+    Key: user.rpc
+  NonBlock: true
+BizRedis:
+  Host: 127.0.0.1:6379
+  Pass:
+  Type: node

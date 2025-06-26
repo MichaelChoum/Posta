@@ -1,6 +1,15 @@
 Name: user.rpc
 ListenOn: 0.0.0.0:8080
 Etcd:
-  Hosts:
+  Hosts: # 注意：这里的Hosts是一个数组，不能写成单个字符串
   - 127.0.0.1:2379
   Key: user.rpc
+DataSource: root:2000@tcp(127.0.0.1:3306)/posta_user?parseTime=true
+CacheRedis: # 注意：这里的CacheRedis是一个数组，不能写成单个对象
+  - Host: 127.0.0.1:6379
+    Pass:
+    Type: node
+BizRedis:
+  Host: 127.0.0.1:6379
+  Pass:
+  Type: node

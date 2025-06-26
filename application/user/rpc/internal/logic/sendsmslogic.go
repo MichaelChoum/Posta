@@ -25,6 +25,6 @@ func NewSendSmsLogic(ctx context.Context, svcCtx *svc.ServiceContext) *SendSmsLo
 
 func (l *SendSmsLogic) SendSms(in *service.SendSmsRequest) (*service.SendSmsResponse, error) {
 	// todo: add your logic here and delete this line
-
+	// todo: 这个后面尝试自己实现一下
 	return &service.SendSmsResponse{}, nil
 }

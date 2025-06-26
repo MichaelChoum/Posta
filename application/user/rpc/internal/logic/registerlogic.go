@@ -2,6 +2,8 @@ package logic
 
 import (
 	"context"
+	"posta/application/user/rpc/internal/model"
+	"time"
 
 	"posta/application/user/rpc/internal/svc"
 	"posta/application/user/rpc/service"
@@ -24,7 +26,24 @@ func NewRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Register
 }
 
 func (l *RegisterLogic) Register(in *service.RegisterRequest) (*service.RegisterResponse, error) {
-	// todo: add your logic here and delete this line
+	ret, err := l.svcCtx.UserModel.Insert(l.ctx, &model.User{
+		Username: in.Username,
+		Mobile:   in.Mobile,
+		Avatar:   in.Avatar,
+		Ctime:    time.Now(),
+		Mtime:    time.Now(),
+	})
+	if err != nil {
+		logx.Errorf("Register req: %v error: %v", in, err)
+		return nil, err
+	}
+	userIdInt64, err := ret.LastInsertId()
+	// 注意：这里可能有个int64和uint64溢出的问题。
+	userId := uint64(userIdInt64)
+	if err != nil {
+		logx.Errorf("LastInsertId error: %v", err)
+		return nil, err
+	}
 
-	return &service.RegisterResponse{}, nil
+	return &service.RegisterResponse{UserId: userId}, nil
 }

@@ -2,11 +2,9 @@ package logic
 
 import (
 	"context"
-
+	"github.com/zeromicro/go-zero/core/logx"
 	"posta/application/applet/internal/svc"
 	"posta/application/applet/internal/types"
-
-	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type LoginLogic struct {
