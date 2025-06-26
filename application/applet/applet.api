@@ -1,0 +1,57 @@
+syntax = "v1"
+
+type (
+	RegisterRequest {
+		Name             string `json:"name"`
+		Mobile           string `json:"mobile"`
+		Password         string `json:"password"`
+		VerificationCode string `json:"verificationCode"`
+	}
+	RegisterResponse {
+	// 注意proto没有uint64类型，使用int64代替
+		UserId int64  `json:"userId"`
+		Token  string `json:"token"`
+	}
+	VerificationRequest {
+		Mobile string `json:"mobile"`
+	}
+	VerificationResponse  {}
+	LoginRequest {
+		Mobile           string `json:"Mobile"`
+		VerificationCode string `json:"verificationCode"`
+	}
+	LoginResponse {
+		UserId int64  `json:"userId"`
+		Token  string `json:"token"`
+	}
+	UserInfoResponse {
+		UserId   int64  `json:"userId"`
+		Username string `json:"username"`
+		Avatar   string `json:"avatar"`
+	}
+)
+
+@server (
+	prefix: /v1
+)
+service applet-api {
+	@handler RegisterHandler
+	post /register (RegisterRequest) returns (RegisterResponse)
+
+	@handler VerificationHandler
+	post /verification (VerificationRequest) returns (VerificationResponse)
+
+	@handler LoginHandler
+	post /login (LoginRequest) returns (LoginResponse)
+}
+
+@server (
+	prefix:    /v1/user
+	signature: true
+	jwt:       Auth
+)
+service applet-api {
+	@handler UserInfoHandler
+	get /info returns (UserInfoResponse)
+}
+
