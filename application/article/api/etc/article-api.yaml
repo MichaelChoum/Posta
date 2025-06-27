@@ -1,0 +1,21 @@
+Name: article-api
+Host: 0.0.0.0
+Port: 9090
+Auth:
+  AccessSecret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  AccessExpire: 604800
+  RefreshSecret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+  RefreshExpire: 2592000
+  RefreshAfter: 604800
+Oss:
+  # 注意：这里的配置是阿里云OSS的配置，Endpoint、AccessKeyId、AccessKeySecret和BucketName需要替换为自己的阿里云OSS配置
+  Endpoint: oss-cn-shenzhen.aliyuncs.com
+  AccessKeyId: LTAI5tMyPwE5xUCH9BRKhf93
+  AccessKeySecret: 6fSn9JtZ4Bss5DX88KX9mhHdqvymqX
+  BucketName: posta
+ArticleRPC:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379
+    Key: article.rpc
+  NonBlock: true
