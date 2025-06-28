@@ -1,0 +1,19 @@
+Name: like.rpc
+# 注意：自己在这里修改端口号，避免和其他服务冲突
+ListenOn: 0.0.0.0:8282
+# 注意：Mode设置为test，表示开启反射服务
+#
+# 在 gRPC 中，反射服务（gRPC Server Reflection） 是一个官方提供的扩展功能，允许客户端通过特定的 gRPC 接口查询服务端：
+# 1 提供了哪些 service
+# 2 每个 service 的方法（method）
+# 3 请求/响应的消息结构（message）
+# 4 整个 .proto 文件内容
+Mode: test
+Etcd:
+  Hosts:
+    - 127.0.0.1:2379
+  Key: like.rpc
+KqPusherConf:
+  Brokers:
+    - 127.0.0.1:9092
+  Topic: topic-posta-like
