@@ -103,7 +103,7 @@ func (l *ArticlesLogic) Articles(in *pb.ArticlesRequest) (*pb.ArticlesResponse, 
 
 		for _, article := range articles {
 			curPage = append(curPage, &pb.ArticleItem{
-				Id:           int64(article.Id),
+				Id:           article.Id,
 				Title:        article.Title,
 				Content:      article.Content,
 				LikeCount:    article.LikeNum,
@@ -126,7 +126,7 @@ func (l *ArticlesLogic) Articles(in *pb.ArticlesRequest) (*pb.ArticlesResponse, 
 		}
 		for _, article := range firstPageArticles {
 			curPage = append(curPage, &pb.ArticleItem{
-				Id:           int64(article.Id),
+				Id:           article.Id,
 				Title:        article.Title,
 				Content:      article.Content,
 				LikeCount:    article.LikeNum,
@@ -193,7 +193,7 @@ func (l *ArticlesLogic) articleByIds(ctx context.Context, articleIds []int64) ([
 			source <- aid
 		}
 	}, func(id int64, writer mr.Writer[*model.Article], cancel func(error)) {
-		p, err := l.svcCtx.ArticleModel.FindOne(ctx, uint64(id))
+		p, err := l.svcCtx.ArticleModel.FindOne(ctx, id)
 		if err != nil {
 			cancel(err)
 			return

@@ -2,12 +2,12 @@ create database posta_article;
 use posta_article;
 
 CREATE TABLE `article` (
-                           `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+                           `id` bigint(20) SIGNED NOT NULL AUTO_INCREMENT COMMENT '主键ID',
                            `title` varchar(255) NOT NULL DEFAULT '' COMMENT '标题',
                            `content` text COLLATE utf8_unicode_ci NOT NULL COMMENT '内容',
                            `cover` varchar(255) NOT NULL DEFAULT '' COMMENT '封面',
                            `description` varchar(255) NOT NULL DEFAULT '' COMMENT '描述',
-                           `author_id` bigint(20) UNSIGNED NOT NULL DEFAULT '0' COMMENT '作者ID',
+                           `author_id` bigint(20) SIGNED NOT NULL DEFAULT '0' COMMENT '作者ID',
                            `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '状态 0:待审核 1:审核不通过 2:可见 3:用户删除',
                            `comment_num` int(11) NOT NULL DEFAULT '0' COMMENT '评论数',
                            `like_num` int(11) NOT NULL DEFAULT '0' COMMENT '点赞数',
