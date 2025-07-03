@@ -3,7 +3,10 @@
 
 package types
 
-import "posta/pkg/jwt"
+type Token struct {
+	AccessToken  string `json:"access_token"`
+	AccessExpire int64  `json:"access_expire"`
+}
 
 type LoginRequest struct {
 	Mobile           string `json:"Mobile"`
@@ -11,8 +14,8 @@ type LoginRequest struct {
 }
 
 type LoginResponse struct {
-	UserId int64  `json:"userId"`
-	Token  string `json:"token"`
+	UserId int64 `json:"userId"`
+	Token  Token `json:"token"`
 }
 
 type RegisterRequest struct {
@@ -25,7 +28,7 @@ type RegisterRequest struct {
 type RegisterResponse struct {
 	UserId int64 `json:"userId"`
 	// 注意：这里的 Token 是 jwt.Token 类型，而不是 string 类型。这里是手动改的
-	Token jwt.Token `json:"token"`
+	Token Token `json:"token"`
 }
 
 type UserInfoResponse struct {

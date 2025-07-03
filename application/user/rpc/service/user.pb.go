@@ -91,7 +91,7 @@ func (x *RegisterRequest) GetPassword() string {
 
 type RegisterResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserId        uint64                 `protobuf:"varint,1,opt,name=userId,proto3" json:"userId,omitempty"`
+	UserId        int64                  `protobuf:"varint,1,opt,name=userId,proto3" json:"userId,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -126,7 +126,7 @@ func (*RegisterResponse) Descriptor() ([]byte, []int) {
 	return file_user_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *RegisterResponse) GetUserId() uint64 {
+func (x *RegisterResponse) GetUserId() int64 {
 	if x != nil {
 		return x.UserId
 	}
@@ -135,7 +135,7 @@ func (x *RegisterResponse) GetUserId() uint64 {
 
 type FindByIdRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserId        uint64                 `protobuf:"varint,1,opt,name=userId,proto3" json:"userId,omitempty"`
+	UserId        int64                  `protobuf:"varint,1,opt,name=userId,proto3" json:"userId,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -170,7 +170,7 @@ func (*FindByIdRequest) Descriptor() ([]byte, []int) {
 	return file_user_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *FindByIdRequest) GetUserId() uint64 {
+func (x *FindByIdRequest) GetUserId() int64 {
 	if x != nil {
 		return x.UserId
 	}
@@ -179,7 +179,7 @@ func (x *FindByIdRequest) GetUserId() uint64 {
 
 type FindByIdResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserId        uint64                 `protobuf:"varint,1,opt,name=userId,proto3" json:"userId,omitempty"`
+	UserId        int64                  `protobuf:"varint,1,opt,name=userId,proto3" json:"userId,omitempty"`
 	Username      string                 `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"`
 	Mobile        string                 `protobuf:"bytes,3,opt,name=mobile,proto3" json:"mobile,omitempty"`
 	Avatar        string                 `protobuf:"bytes,4,opt,name=avatar,proto3" json:"avatar,omitempty"`
@@ -217,7 +217,7 @@ func (*FindByIdResponse) Descriptor() ([]byte, []int) {
 	return file_user_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *FindByIdResponse) GetUserId() uint64 {
+func (x *FindByIdResponse) GetUserId() int64 {
 	if x != nil {
 		return x.UserId
 	}
@@ -291,7 +291,7 @@ func (x *FindByMobileRequest) GetMobile() string {
 
 type FindByMobileResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserId        uint64                 `protobuf:"varint,1,opt,name=userId,proto3" json:"userId,omitempty"`
+	UserId        int64                  `protobuf:"varint,1,opt,name=userId,proto3" json:"userId,omitempty"`
 	Username      string                 `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"`
 	Mobile        string                 `protobuf:"bytes,3,opt,name=mobile,proto3" json:"mobile,omitempty"`
 	Avatar        string                 `protobuf:"bytes,4,opt,name=avatar,proto3" json:"avatar,omitempty"`
@@ -329,7 +329,7 @@ func (*FindByMobileResponse) Descriptor() ([]byte, []int) {
 	return file_user_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *FindByMobileResponse) GetUserId() uint64 {
+func (x *FindByMobileResponse) GetUserId() int64 {
 	if x != nil {
 		return x.UserId
 	}
@@ -359,7 +359,7 @@ func (x *FindByMobileResponse) GetAvatar() string {
 
 type SendSmsRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	UserId        uint64                 `protobuf:"varint,1,opt,name=userId,proto3" json:"userId,omitempty"`
+	UserId        int64                  `protobuf:"varint,1,opt,name=userId,proto3" json:"userId,omitempty"`
 	Mobile        string                 `protobuf:"bytes,2,opt,name=mobile,proto3" json:"mobile,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -395,7 +395,7 @@ func (*SendSmsRequest) Descriptor() ([]byte, []int) {
 	return file_user_proto_rawDescGZIP(), []int{6}
 }
 
-func (x *SendSmsRequest) GetUserId() uint64 {
+func (x *SendSmsRequest) GetUserId() int64 {
 	if x != nil {
 		return x.UserId
 	}
@@ -457,23 +457,23 @@ const file_user_proto_rawDesc = "" +
 	"\x06avatar\x18\x03 \x01(\tR\x06avatar\x12\x1a\n" +
 	"\bpassword\x18\x04 \x01(\tR\bpassword\"*\n" +
 	"\x10RegisterResponse\x12\x16\n" +
-	"\x06userId\x18\x01 \x01(\x04R\x06userId\")\n" +
+	"\x06userId\x18\x01 \x01(\x03R\x06userId\")\n" +
 	"\x0fFindByIdRequest\x12\x16\n" +
-	"\x06userId\x18\x01 \x01(\x04R\x06userId\"v\n" +
+	"\x06userId\x18\x01 \x01(\x03R\x06userId\"v\n" +
 	"\x10FindByIdResponse\x12\x16\n" +
-	"\x06userId\x18\x01 \x01(\x04R\x06userId\x12\x1a\n" +
+	"\x06userId\x18\x01 \x01(\x03R\x06userId\x12\x1a\n" +
 	"\busername\x18\x02 \x01(\tR\busername\x12\x16\n" +
 	"\x06mobile\x18\x03 \x01(\tR\x06mobile\x12\x16\n" +
 	"\x06avatar\x18\x04 \x01(\tR\x06avatar\"-\n" +
 	"\x13FindByMobileRequest\x12\x16\n" +
 	"\x06mobile\x18\x01 \x01(\tR\x06mobile\"z\n" +
 	"\x14FindByMobileResponse\x12\x16\n" +
-	"\x06userId\x18\x01 \x01(\x04R\x06userId\x12\x1a\n" +
+	"\x06userId\x18\x01 \x01(\x03R\x06userId\x12\x1a\n" +
 	"\busername\x18\x02 \x01(\tR\busername\x12\x16\n" +
 	"\x06mobile\x18\x03 \x01(\tR\x06mobile\x12\x16\n" +
 	"\x06avatar\x18\x04 \x01(\tR\x06avatar\"@\n" +
 	"\x0eSendSmsRequest\x12\x16\n" +
-	"\x06userId\x18\x01 \x01(\x04R\x06userId\x12\x16\n" +
+	"\x06userId\x18\x01 \x01(\x03R\x06userId\x12\x16\n" +
 	"\x06mobile\x18\x02 \x01(\tR\x06mobile\"\x11\n" +
 	"\x0fSendSmsResponse2\x93\x02\n" +
 	"\x04User\x12?\n" +
