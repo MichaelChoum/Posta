@@ -9,6 +9,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/zeromicro/go-queue v1.2.2
 	github.com/zeromicro/go-zero v1.8.4
+	golang.org/x/sync v0.11.0
 	google.golang.org/grpc v1.65.0
 	google.golang.org/protobuf v1.36.5
 )
