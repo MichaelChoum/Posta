@@ -38,6 +38,7 @@ func (m *customArticleModel) ArticlesByUserId(ctx context.Context, userId, likeN
 		anyField any
 		articles []*Article
 	)
+	// 注意：这里并不会将行记录加入缓存
 	if sortField == "like_num" {
 		anyField = likeNum
 		sql = fmt.Sprintf("select "+articleRows+" from "+m.table+" where author_id=? and like_num < ? order by %s desc limit ?", sortField)

@@ -200,6 +200,9 @@ func (l *ArticlesLogic) articleByIds(ctx context.Context, articleIds []int64) ([
 			source <- aid
 		}
 	}, func(id int64, writer mr.Writer[*model.Article], cancel func(error)) {
+		// 注意：这里调用了FindOne，会先查询缓存，缓存中没查询到数据，再从数据库中读数据并保存到缓存中。
+		// 但是，条件查询语句并不会将数据库中的数据保存到缓存中，比如第一次读取数据库中某个user的点赞数前10的文章，这并不会将这些文章加入到缓存中。
+		// 这是go_zero只有对于model的简单操作才进行了缓存优化。
 		p, err := l.svcCtx.ArticleModel.FindOne(ctx, id)
 		if err != nil {
 			cancel(err)
