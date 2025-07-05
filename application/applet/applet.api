@@ -8,7 +8,6 @@ type (
 		VerificationCode string `json:"verificationCode"`
 	}
 	RegisterResponse {
-	// 注意proto没有uint64类型，使用int64代替
 		UserId int64  `json:"userId"`
 		Token  string `json:"token"`
 	}

@@ -17,8 +17,26 @@ ArticleKqConsumerConf:
   Offset: last
   Consumers: 1
   Processors: 1
-Datasource: root:2000@tcp(127.0.0.1:3306)/posta_article?parseTime=true
+Datasource: root:2000@tcp(127.0.0.1:3306)/posta_article?parseTime=true&loc=Local
 BizRedis:
   Host: 127.0.0.1:6379
   Pass:
   Type: node
+Es:
+  Addresses:
+    - http://localhost:9200/
+  Username: elastic
+  # 注意：这里要用自己的密码
+  Password:   mLs_ER4tZJu2Hy7Tz0et
+Prometheus:
+  Host: 0.0.0.0
+  Port: 9101
+  Path: /metrics
+Telemetry:
+  Endpoint: http://127.0.0.1:14268/api/traces
+UserRPC:
+  Etcd:
+    Hosts: # 注意：这里的Hosts是一个数组
+      - 127.0.0.1:2379
+    Key: user.rpc
+  NonBlock: true

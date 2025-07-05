@@ -4,7 +4,7 @@ Etcd:
   Hosts:
     - 127.0.0.1:2379
   Key: article.rpc
-DataSource: root:2000@tcp(127.0.0.1:3306)/posta_article?parseTime=true
+DataSource: root:2000@tcp(127.0.0.1:3306)/posta_article?parseTime=true&loc=Local
 CacheRedis:
   - Host: 127.0.0.1:6379
     Pass:

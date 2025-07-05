@@ -43,9 +43,7 @@ func (l *RegisterLogic) Register(in *service.RegisterRequest) (*service.Register
 		logx.Errorf("Register req: %v error: %v", in, err)
 		return nil, err
 	}
-	userIdInt64, err := ret.LastInsertId()
-	// 注意：这里可能有个int64和uint64溢出的问题。
-	userId := uint64(userIdInt64)
+	userId, err := ret.LastInsertId()
 	if err != nil {
 		logx.Errorf("LastInsertId error: %v", err)
 		return nil, err
