@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"errors"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
 
 	"posta/application/article/rpc/internal/svc"
@@ -28,7 +29,7 @@ func (l *ArticleDetailLogic) ArticleDetail(in *pb.ArticleDetailRequest) (*pb.Art
 	// 注意：这里体现了应对缓存穿透的方法，在访问到没有的数据时会缓存一个空值。
 	article, err := l.svcCtx.ArticleModel.FindOne(l.ctx, in.ArticleId)
 	if err != nil {
-		if err == sqlx.ErrNotFound {
+		if errors.Is(err, sqlx.ErrNotFound) {
 			return &pb.ArticleDetailResponse{}, nil
 		}
 		return nil, err
@@ -36,8 +37,14 @@ func (l *ArticleDetailLogic) ArticleDetail(in *pb.ArticleDetailRequest) (*pb.Art
 
 	return &pb.ArticleDetailResponse{
 		Article: &pb.ArticleItem{
-			Id:    article.Id,
-			Title: article.Title,
+			Id:          article.Id,
+			Title:       article.Title,
+			Content:     article.Content,
+			Description: article.Description,
+			Cover:       article.Cover,
+			AuthorId:    article.AuthorId,
+			LikeCount:   article.LikeNum,
+			PublishTime: article.PublishTime.Unix(),
 		},
 	}, nil
 }

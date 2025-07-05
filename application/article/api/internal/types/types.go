@@ -3,6 +3,39 @@
 
 package types
 
+type ArticleDetailRequest struct {
+	ArticleId int64 `form:"article_id"`
+}
+
+type ArticleDetailResponse struct {
+	Title       string `json:"title"`
+	Content     string `json:"content"`
+	Description string `json:"description"`
+	Cover       string `json:"cover"`
+	AuthorId    string `json:"author_id"`
+	AuthorName  string `json:"author_name"`
+}
+
+type ArticleInfo struct {
+	ArticleId   int64  `json:"article_id"`
+	Title       string `json:"title"`
+	Content     string `json:"content"`
+	Description string `json:"description"`
+	Cover       string `json:"cover"`
+}
+
+type ArticleListRequest struct {
+	AuthorId  int64 `form:"author_id"`
+	Cursor    int64 `form:"cursor"`
+	PageSize  int64 `form:"page_size"`
+	SortType  int32 `form:"sort_type"`
+	ArticleId int64 `form:"article_id"`
+}
+
+type ArticleListResponse struct {
+	Articles []ArticleInfo `json:"articles"`
+}
+
 type PublishRequest struct {
 	Title       string `json:"title"`
 	Content     string `json:"content"`

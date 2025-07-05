@@ -227,6 +227,7 @@ type ArticleItem struct {
 	CommentCount  int64                  `protobuf:"varint,6,opt,name=commentCount,proto3" json:"commentCount,omitempty"`
 	LikeCount     int64                  `protobuf:"varint,7,opt,name=likeCount,proto3" json:"likeCount,omitempty"`
 	PublishTime   int64                  `protobuf:"varint,8,opt,name=publishTime,proto3" json:"publishTime,omitempty"`
+	AuthorId      int64                  `protobuf:"varint,9,opt,name=authorId,proto3" json:"authorId,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -313,6 +314,13 @@ func (x *ArticleItem) GetLikeCount() int64 {
 func (x *ArticleItem) GetPublishTime() int64 {
 	if x != nil {
 		return x.PublishTime
+	}
+	return 0
+}
+
+func (x *ArticleItem) GetAuthorId() int64 {
+	if x != nil {
+		return x.AuthorId
 	}
 	return 0
 }
@@ -579,7 +587,7 @@ const file_article_proto_rawDesc = "" +
 	"\x06cursor\x18\x02 \x01(\x03R\x06cursor\x12\x1a\n" +
 	"\bpageSize\x18\x03 \x01(\x03R\bpageSize\x12\x1a\n" +
 	"\bsortType\x18\x04 \x01(\x05R\bsortType\x12\x1c\n" +
-	"\tarticleId\x18\x05 \x01(\x03R\tarticleId\"\xe9\x01\n" +
+	"\tarticleId\x18\x05 \x01(\x03R\tarticleId\"\x85\x02\n" +
 	"\vArticleItem\x12\x0e\n" +
 	"\x02Id\x18\x01 \x01(\x03R\x02Id\x12\x14\n" +
 	"\x05title\x18\x02 \x01(\tR\x05title\x12\x18\n" +
@@ -588,7 +596,8 @@ const file_article_proto_rawDesc = "" +
 	"\x05cover\x18\x05 \x01(\tR\x05cover\x12\"\n" +
 	"\fcommentCount\x18\x06 \x01(\x03R\fcommentCount\x12\x1c\n" +
 	"\tlikeCount\x18\a \x01(\x03R\tlikeCount\x12 \n" +
-	"\vpublishTime\x18\b \x01(\x03R\vpublishTime\"\x8b\x01\n" +
+	"\vpublishTime\x18\b \x01(\x03R\vpublishTime\x12\x1a\n" +
+	"\bauthorId\x18\t \x01(\x03R\bauthorId\"\x8b\x01\n" +
 	"\x10ArticlesResponse\x12+\n" +
 	"\barticles\x18\x01 \x03(\v2\x0f.pb.ArticleItemR\barticles\x12\x14\n" +
 	"\x05isEnd\x18\x02 \x01(\bR\x05isEnd\x12\x16\n" +

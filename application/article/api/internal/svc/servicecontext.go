@@ -5,6 +5,7 @@ import (
 	"github.com/zeromicro/go-zero/zrpc"
 	"posta/application/article/api/internal/config"
 	"posta/application/article/rpc/article"
+	"posta/application/user/rpc/user"
 )
 
 const (
@@ -16,6 +17,7 @@ type ServiceContext struct {
 	Config     config.Config
 	OssClient  *oss.Client
 	ArticleRPC article.Article
+	UserRPC    user.User
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
@@ -35,5 +37,6 @@ func NewServiceContext(c config.Config) *ServiceContext {
 		Config:     c,
 		OssClient:  oc,
 		ArticleRPC: article.NewArticle(zrpc.MustNewClient(c.ArticleRPC)),
+		UserRPC:    user.NewUser(zrpc.MustNewClient(c.UserRPC)),
 	}
 }

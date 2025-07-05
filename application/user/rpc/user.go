@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"posta/pkg/consul"
 	"posta/pkg/interceptors"
 
 	"posta/application/user/rpc/internal/config"
@@ -38,6 +39,12 @@ func main() {
 
 	// 注意：自定义拦截器
 	s.AddUnaryInterceptors(interceptors.ServerErrorInterceptor())
+
+	// 服务注册
+	err := consul.Register(c.Consul, fmt.Sprintf("%s:%d", c.ServiceConf.Prometheus.Host, c.ServiceConf.Prometheus.Port))
+	if err != nil {
+		fmt.Printf("register consul error: %v\n", err)
+	}
 
 	fmt.Printf("Starting rpc server at %s...\n", c.ListenOn)
 	s.Start()
