@@ -1,0 +1,23 @@
+Name: user-rpc
+ListenOn: 0.0.0.0:9090
+DataSource: root:2000@tcp(10.105.0.187:3306)/posta_user?parseTime=true
+CacheRedis:
+  # 注意：这里的host是现在k8s中启动redis，再看分配到了哪个。当然，正常来说不是这样写死的。
+  - Host: 10.106.160.116:6379
+    Pass:
+    Type: node
+BizRedis:
+  Host: 10.106.160.116:6379
+  Pass:
+  Type: node
+Consul:
+  Host: 127.0.0.1:8500
+  Key: user-rpc
+  Meta:
+    env: test
+    service_group: posta
+    service_name: user-rpc
+Prometheus:
+  Host: 0.0.0.0
+  Port: 9103
+  Path: /metrics

@@ -1,0 +1,22 @@
+Name: article-rpc
+ListenOn: 0.0.0.0:9090
+DataSource: root:2000@tcp(10.105.0.187:3306)/posta_article?parseTime=true&loc=Local
+CacheRedis:
+  - Host: 10.106.160.116:6379
+    Pass:
+    Type: node
+BizRedis:
+  Host: 10.106.160.116:6379
+  Pass:
+  Type: node
+Consul:
+  Host: 127.0.0.1:8500
+  Key: article-rpc
+  Meta:
+    env: test
+    service_group: posta
+    service_name: article-rpc
+Prometheus:
+  Host: 0.0.0.0
+  Port: 9102
+  Path: /metrics

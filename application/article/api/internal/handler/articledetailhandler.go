@@ -16,7 +16,6 @@ func ArticleDetailHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 			httpx.ErrorCtx(r.Context(), w, err)
 			return
 		}
-
 		l := logic.NewArticleDetailLogic(r.Context(), svcCtx)
 		resp, err := l.ArticleDetail(&req)
 		if err != nil {

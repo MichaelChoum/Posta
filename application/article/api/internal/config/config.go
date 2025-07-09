@@ -3,7 +3,6 @@ package config
 import (
 	"github.com/zeromicro/go-zero/rest"
 	"github.com/zeromicro/go-zero/zrpc"
-	"posta/pkg/consul"
 )
 
 type Config struct {
@@ -23,5 +22,4 @@ type Config struct {
 		ReadWriteTimeout int64 `json:",optional"`
 	}
 	UserRPC zrpc.RpcClientConf
-	Consul  consul.Conf
 }

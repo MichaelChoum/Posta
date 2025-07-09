@@ -16,14 +16,12 @@ type ServiceContext struct {
 }
 
 func NewServiceContext(c config.Config) *ServiceContext {
-	rds, err := redis.NewRedis(redis.RedisConf{
-		Host: c.BizRedis.Host,
-		Pass: c.BizRedis.Pass,
-		Type: c.BizRedis.Type,
+	rds, _ := redis.NewRedis(redis.RedisConf{
+		Host:     c.BizRedis.Host,
+		Pass:     c.BizRedis.Pass,
+		Type:     c.BizRedis.Type,
+		NonBlock: true, // 注意：避免因为超时就直接panic
 	})
-	if err != nil {
-		panic(err)
-	}
 
 	return &ServiceContext{
 		Config:       c,

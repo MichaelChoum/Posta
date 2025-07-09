@@ -2,7 +2,6 @@ package svc
 
 import (
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
-	"github.com/zeromicro/go-zero/zrpc"
 	"posta/application/article/api/internal/config"
 	"posta/application/article/rpc/article"
 	"posta/application/user/rpc/user"
@@ -34,9 +33,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	}
 
 	return &ServiceContext{
-		Config:     c,
-		OssClient:  oc,
-		ArticleRPC: article.NewArticle(zrpc.MustNewClient(c.ArticleRPC)),
-		UserRPC:    user.NewUser(zrpc.MustNewClient(c.UserRPC)),
+		Config:    c,
+		OssClient: oc,
 	}
 }
