@@ -1,0 +1,27 @@
+Name: reply.rpc
+ListenOn: 0.0.0.0:8484
+Etcd:
+  Hosts:
+  - 127.0.0.1:2379
+  Key: reply.rpc
+
+DataSource: root:2000@tcp(127.0.0.1:3306)/posta_reply?parseTime=true&loc=Local
+CacheRedis:
+  - Host: 127.0.0.1:6379
+    Pass:
+    Type: node
+BizRedis:
+  Host: 127.0.0.1:6379
+  Pass:
+  Type: node
+Consul:
+  Host: 127.0.0.1:8500
+  Key: reply-rpc
+  Meta:
+    env: test
+    service_group: posta
+    service_name: reply-rpc
+
+
+
+

@@ -1,0 +1,80 @@
+syntax = "proto3";
+
+package service;
+option go_package="./service";
+
+service Reply {
+  rpc ReplyPublish(ReplyPublishRequest) returns (ReplyPublishResponse);
+  rpc ReplyDelete(ReplyDeleteRequest) returns (ReplyDeleteResponse);
+  // 可以查看文章的一级评论，也可以查看一级评论下的二级评论
+  rpc Replies(RepliesRequest) returns (RepliesResponse);
+  // 可以查看二级评论下的对话链。
+  rpc GetReplyThread(GetReplyThreadRequest) returns (GetReplyThreadResponse);
+}
+
+message ReplyPublishRequest {
+  int64 replyUserId = 1;
+  int64 targetId = 2;
+  int64 parent_id = 3;
+  int64 rootReplyId = 4;
+  int64 beReplyUserId = 5;
+  string content = 6;
+}
+
+message ReplyPublishResponse {
+  int64 replyId = 1;
+}
+
+message ReplyDeleteRequest {
+  int64 replyUserId = 1;
+  int64 targetId = 2;
+  int64 parentId = 3;
+  int64 replyId = 4;
+}
+
+message ReplyDeleteResponse {
+}
+
+message RepliesRequest {
+  int64 targetId = 1;
+  int64 parent_id = 2;
+  int64 cursor = 3;
+  int64 pageSize = 4;
+  int32 sortType = 5;
+  // 用于和cursor一起区分到哪一页了的
+  int64 replyId = 6;
+}
+
+message ReplyItem {
+  int64 Id = 1;
+  int64 replyUserId = 2;
+  int64 beReplyUserId = 3; //用于二级评论展示在回复谁
+  int64 parent_id = 4; //拥有查看一级评论的二级评论能在最上面看到一级评论
+  string content = 5;
+  int64 likeCount = 6;
+  int64 createTime = 7;
+}
+
+message RepliesResponse {
+  repeated ReplyItem replies = 1;
+  bool isEnd = 2;
+  int64 cursor = 3;
+  // 用于和cursor一起区分到哪一页了的
+  int64 replyId = 4;
+}
+
+// 类似于b站的查看对话功能
+message GetReplyThreadRequest {
+  string bizId = 1;             // 业务类型（如 "article"）
+  int64 rootReplyId = 2;        // 要查看的对话根评论 ID
+  int64 cursor = 3;             // 分页游标
+  int64 pageSize = 4;           // 每页数量
+  int64 replyId = 5;
+}
+
+message GetReplyThreadResponse {
+  repeated ReplyItem replies = 1;   // 返回对话链中的所有评论
+  bool isEnd = 2;                   // 是否已加载完
+  int64 cursor = 3;             // 下一页游标
+  int64 replyId = 4;
+}

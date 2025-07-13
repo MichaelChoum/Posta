@@ -82,6 +82,7 @@ func (l *ArticlesLogic) Articles(in *pb.ArticlesRequest) (*pb.ArticlesResponse, 
 		if articleIds[len(articleIds)-1] == -1 {
 			isEnd = true
 		}
+		// 返回的articles是无序的
 		articles, err = l.articleByIds(l.ctx, articleIds)
 		if err != nil {
 			return nil, err
@@ -191,6 +192,7 @@ func (l *ArticlesLogic) Articles(in *pb.ArticlesRequest) (*pb.ArticlesResponse, 
 	return ret, nil
 }
 
+// 接收一个 articleIds 的整数 ID 列表，然后并发查询每一个文章详情，最后组合成列表返回。
 func (l *ArticlesLogic) articleByIds(ctx context.Context, articleIds []int64) ([]*model.Article, error) {
 	articles, err := mr.MapReduce[int64, *model.Article, []*model.Article](func(source chan<- int64) {
 		for _, aid := range articleIds {
@@ -227,6 +229,7 @@ func articlesKey(uid int64, sortType int32) string {
 	return fmt.Sprintf(prefixArticles, uid, sortType)
 }
 
+// 从 Redis 缓存中，获取某个用户的文章 ID 列表（按某种排序方式），用于分页展示。
 func (l *ArticlesLogic) cacheArticles(ctx context.Context, uid, cursor, ps int64, sortType int32) ([]int64, error) {
 	key := articlesKey(uid, sortType)
 	b, err := l.svcCtx.BizRedis.ExistsCtx(ctx, key)
@@ -258,6 +261,7 @@ func (l *ArticlesLogic) cacheArticles(ctx context.Context, uid, cursor, ps int64
 	return ids, nil
 }
 
+// 将一批文章的信息（ID + 排序依据）加入到 Redis 的有序集合（ZSet）中用于缓存，并设置过期时间。
 func (l *ArticlesLogic) addCacheArticles(ctx context.Context, articles []*model.Article, userId int64, sortType int32) error {
 	if len(articles) == 0 {
 		return nil
