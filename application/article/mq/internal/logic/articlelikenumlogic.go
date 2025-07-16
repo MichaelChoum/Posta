@@ -35,7 +35,7 @@ func (l *ArticleLikeNumLogic) Consume(ctx context.Context, _, val string) error 
 		return err
 	}
 
-	return l.updateArticleLikeNum(l.ctx, msg)
+	return l.updateArticleLikeNum(ctx, msg)
 }
 
 func (l *ArticleLikeNumLogic) updateArticleLikeNum(ctx context.Context, msg *types.CanalLikeMsg) error {
@@ -44,7 +44,9 @@ func (l *ArticleLikeNumLogic) updateArticleLikeNum(ctx context.Context, msg *typ
 	}
 
 	for _, d := range msg.Data {
-		if d.BizID != types.ArticleBizID {
+		bizId, err := strconv.ParseInt(d.BizID, 10, 64)
+		if bizId != types.BizArticle {
+			logx.Errorf("strconv.ParseInt bizid: %s error: %v", d.BizID, err)
 			continue
 		}
 		id, err := strconv.ParseInt(d.ObjID, 10, 64)

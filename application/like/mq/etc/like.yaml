@@ -1,4 +1,5 @@
 Name: like_mq
+DataSource: root:2000@tcp(127.0.0.1:3306)/posta_like?parseTime=true&loc=Local
 KqConsumerConf:
   Name: like-kq-consumer
   Brokers: # Kafka broker 的地址列表，格式为 "host:port"，可以配置多个，Go-Zero 会自动连接并管理。
@@ -27,3 +28,8 @@ KqConsumerConf:
   #| 容错性  | 只有一个服务，挂了全挂                    | 多个服务，某个挂掉可以被重分配                     |
   #| 资源利用 | 多核 CPU 可以高效利用                  | 多机、多容器集群可以分散负载                      |
   #| 部署成本 | 简单                             | 灵活（可跨容器、跨机器）                        |
+
+BizRedis:
+  Host: 127.0.0.1:6379
+  Pass:
+  Type: node

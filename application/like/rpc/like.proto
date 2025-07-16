@@ -1,39 +1,52 @@
 syntax = "proto3";
 
-package service;
-option go_package="./service";
+package pb;
+option go_package="./pb";
 
+// 点赞服务定义
 service Like {
-  rpc Thumbup(ThumbupRequest) returns (ThumbupResponse);
-  rpc IsThumbup(IsThumbupRequest) returns (IsThumbupResponse);
+  // 用户对某个对象点赞或取消点赞
+  rpc LikeAction(LikeActionRequest) returns (LikeActionResponse);
+
+  // 查询用户是否点赞（单个）
+  rpc IsLiked(IsLikedRequest) returns (IsLikedResponse);
+
+  // 查询点赞数（单个）
+  rpc LikeCount(LikeCountRequest) returns (LikeCountResponse);
 }
 
-message ThumbupRequest {
-  string bizId = 1; // 业务id
-  int64 objId = 2; // 点赞对象id
-  int64 userId  = 3; // 用户id
-  int32 likeType = 4; // 类型
+// 点赞或取消点赞请求
+message LikeActionRequest {
+  int64 biz_id = 1;    // 业务类型，这里的话可以是 "article"或"reply"
+  int64 obj_id = 2;     // 点赞目标ID
+  int64 user_id = 3;    // 用户ID
+  int32 action = 4;     // 操作类型：0点赞，1取消点赞
 }
 
-message ThumbupResponse {
-  string bizId = 1; // 业务id
-  int64 objId = 2; // 点赞对象id
-  int64 likeNum = 3; // 点赞数
-  int64 dislikeNum = 4; // 点踩数
+// 点赞响应
+message LikeActionResponse {
+  bool success = 1; // 返回操作是否成功
+  bool liked = 2; // 当前操作后是否处于点赞状态（true=已点赞，false=未点赞）
 }
 
-message IsThumbupRequest {
-  string bizId = 1; // 业务id
-  int64 targetId = 2; // 点赞对象id
-  int64 userId  = 3; // 用户id
+
+message IsLikedRequest {
+  int64 biz_id = 1;
+  int64 obj_id = 2;
+  int64 user_id = 3;
 }
 
-message IsThumbupResponse {
-  map<int64, UserThumbup> userThumbups = 1;
+message IsLikedResponse {
+  bool liked = 1;
 }
 
-message UserThumbup {
-  int64 userId = 1;
-  int64 thumbupTime = 2;
-  int32 likeType = 3; // 类型
+
+message LikeCountRequest {
+  int64 biz_id = 1;
+  int64 obj_id = 2;
 }
+
+message LikeCountResponse {
+  int64 count = 1;
+}
+

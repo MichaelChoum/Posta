@@ -7,22 +7,27 @@ package like
 import (
 	"context"
 
-	"posta/application/like/rpc/service"
+	"posta/application/like/rpc/pb"
 
 	"github.com/zeromicro/go-zero/zrpc"
 	"google.golang.org/grpc"
 )
 
 type (
-	IsThumbupRequest  = service.IsThumbupRequest
-	IsThumbupResponse = service.IsThumbupResponse
-	ThumbupRequest    = service.ThumbupRequest
-	ThumbupResponse   = service.ThumbupResponse
-	UserThumbup       = service.UserThumbup
+	IsLikedRequest     = pb.IsLikedRequest
+	IsLikedResponse    = pb.IsLikedResponse
+	LikeActionRequest  = pb.LikeActionRequest
+	LikeActionResponse = pb.LikeActionResponse
+	LikeCountRequest   = pb.LikeCountRequest
+	LikeCountResponse  = pb.LikeCountResponse
 
 	Like interface {
-		Thumbup(ctx context.Context, in *ThumbupRequest, opts ...grpc.CallOption) (*ThumbupResponse, error)
-		IsThumbup(ctx context.Context, in *IsThumbupRequest, opts ...grpc.CallOption) (*IsThumbupResponse, error)
+		// 用户对某个对象点赞或取消点赞
+		LikeAction(ctx context.Context, in *LikeActionRequest, opts ...grpc.CallOption) (*LikeActionResponse, error)
+		// 查询用户是否点赞（单个）
+		IsLiked(ctx context.Context, in *IsLikedRequest, opts ...grpc.CallOption) (*IsLikedResponse, error)
+		// 查询点赞数（单个）
+		LikeCount(ctx context.Context, in *LikeCountRequest, opts ...grpc.CallOption) (*LikeCountResponse, error)
 	}
 
 	defaultLike struct {
@@ -36,12 +41,20 @@ func NewLike(cli zrpc.Client) Like {
 	}
 }
 
-func (m *defaultLike) Thumbup(ctx context.Context, in *ThumbupRequest, opts ...grpc.CallOption) (*ThumbupResponse, error) {
-	client := service.NewLikeClient(m.cli.Conn())
-	return client.Thumbup(ctx, in, opts...)
+// 用户对某个对象点赞或取消点赞
+func (m *defaultLike) LikeAction(ctx context.Context, in *LikeActionRequest, opts ...grpc.CallOption) (*LikeActionResponse, error) {
+	client := pb.NewLikeClient(m.cli.Conn())
+	return client.LikeAction(ctx, in, opts...)
 }
 
-func (m *defaultLike) IsThumbup(ctx context.Context, in *IsThumbupRequest, opts ...grpc.CallOption) (*IsThumbupResponse, error) {
-	client := service.NewLikeClient(m.cli.Conn())
-	return client.IsThumbup(ctx, in, opts...)
+// 查询用户是否点赞（单个）
+func (m *defaultLike) IsLiked(ctx context.Context, in *IsLikedRequest, opts ...grpc.CallOption) (*IsLikedResponse, error) {
+	client := pb.NewLikeClient(m.cli.Conn())
+	return client.IsLiked(ctx, in, opts...)
+}
+
+// 查询点赞数（单个）
+func (m *defaultLike) LikeCount(ctx context.Context, in *LikeCountRequest, opts ...grpc.CallOption) (*LikeCountResponse, error) {
+	client := pb.NewLikeClient(m.cli.Conn())
+	return client.LikeCount(ctx, in, opts...)
 }

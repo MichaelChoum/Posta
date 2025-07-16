@@ -245,6 +245,7 @@ func (l *RepliesLogic) Replies(in *service.RepliesRequest) (*service.RepliesResp
 			ctx := context.Background() // Debug: 使用新上下文，避免主流程已退出
 			var err error
 
+			// 对于一级评论按时间排序
 			if len(replies) < types.DefaultLimit && len(replies) > 0 {
 				// 注意：这里加入redis中的是zset的东西，只是id而已。省去了排序过程，但是没有将整个查到的数据都放进redis中，避免redis数据量太大了。
 				// 之前考虑到可能存在“假尾”问题，但是这里的逻辑是len(replies) < types.DefaultLimit时才会在redis中缓存-1。
@@ -254,6 +255,7 @@ func (l *RepliesLogic) Replies(in *service.RepliesRequest) (*service.RepliesResp
 				}
 			}
 
+			// 对于二级评论按时间排序
 			if in.SortType == types.SortPublishTime && in.ParentId != 0 {
 				maxTime, err := l.svcCtx.ReplyModel.MaxCreateTimeByParentId(ctx, in.ParentId)
 				if err != nil {

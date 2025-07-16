@@ -9,12 +9,12 @@ import (
 
 	"posta/application/like/rpc/internal/logic"
 	"posta/application/like/rpc/internal/svc"
-	"posta/application/like/rpc/service"
+	"posta/application/like/rpc/pb"
 )
 
 type LikeServer struct {
 	svcCtx *svc.ServiceContext
-	service.UnimplementedLikeServer
+	pb.UnimplementedLikeServer
 }
 
 func NewLikeServer(svcCtx *svc.ServiceContext) *LikeServer {
@@ -23,12 +23,20 @@ func NewLikeServer(svcCtx *svc.ServiceContext) *LikeServer {
 	}
 }
 
-func (s *LikeServer) Thumbup(ctx context.Context, in *service.ThumbupRequest) (*service.ThumbupResponse, error) {
-	l := logic.NewThumbupLogic(ctx, s.svcCtx)
-	return l.Thumbup(in)
+// 用户对某个对象点赞或取消点赞
+func (s *LikeServer) LikeAction(ctx context.Context, in *pb.LikeActionRequest) (*pb.LikeActionResponse, error) {
+	l := logic.NewLikeActionLogic(ctx, s.svcCtx)
+	return l.LikeAction(in)
 }
 
-func (s *LikeServer) IsThumbup(ctx context.Context, in *service.IsThumbupRequest) (*service.IsThumbupResponse, error) {
-	l := logic.NewIsThumbupLogic(ctx, s.svcCtx)
-	return l.IsThumbup(in)
+// 查询用户是否点赞（单个）
+func (s *LikeServer) IsLiked(ctx context.Context, in *pb.IsLikedRequest) (*pb.IsLikedResponse, error) {
+	l := logic.NewIsLikedLogic(ctx, s.svcCtx)
+	return l.IsLiked(in)
+}
+
+// 查询点赞数（单个）
+func (s *LikeServer) LikeCount(ctx context.Context, in *pb.LikeCountRequest) (*pb.LikeCountResponse, error) {
+	l := logic.NewLikeCountLogic(ctx, s.svcCtx)
+	return l.LikeCount(in)
 }

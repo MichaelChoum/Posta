@@ -26,10 +26,10 @@ var (
 type (
 	likeCountModel interface {
 		Insert(ctx context.Context, data *LikeCount) (sql.Result, error)
-		FindOne(ctx context.Context, id uint64) (*LikeCount, error)
-		FindOneByBizIdObjId(ctx context.Context, bizId string, objId uint64) (*LikeCount, error)
+		FindOne(ctx context.Context, id int64) (*LikeCount, error)
+		FindOneByBizIdObjId(ctx context.Context, bizId int64, objId int64) (*LikeCount, error)
 		Update(ctx context.Context, data *LikeCount) error
-		Delete(ctx context.Context, id uint64) error
+		Delete(ctx context.Context, id int64) error
 	}
 
 	defaultLikeCountModel struct {
@@ -38,11 +38,10 @@ type (
 	}
 
 	LikeCount struct {
-		Id         uint64    `db:"id"`          // 主键ID
-		BizId      string    `db:"biz_id"`      // 业务ID
-		ObjId      uint64    `db:"obj_id"`      // 点赞对象id
+		Id         int64     `db:"id"`          // 主键ID
+		BizId      int64     `db:"biz_id"`      // 业务ID
+		ObjId      int64     `db:"obj_id"`      // 点赞对象id
 		LikeNum    int64     `db:"like_num"`    // 点赞数
-		DislikeNum int64     `db:"dislike_num"` // 点踩数
 		CreateTime time.Time `db:"create_time"` // 创建时间
 		UpdateTime time.Time `db:"update_time"` // 最后修改时间
 	}
@@ -55,13 +54,13 @@ func newLikeCountModel(conn sqlx.SqlConn) *defaultLikeCountModel {
 	}
 }
 
-func (m *defaultLikeCountModel) Delete(ctx context.Context, id uint64) error {
+func (m *defaultLikeCountModel) Delete(ctx context.Context, id int64) error {
 	query := fmt.Sprintf("delete from %s where `id` = ?", m.table)
 	_, err := m.conn.ExecCtx(ctx, query, id)
 	return err
 }
 
-func (m *defaultLikeCountModel) FindOne(ctx context.Context, id uint64) (*LikeCount, error) {
+func (m *defaultLikeCountModel) FindOne(ctx context.Context, id int64) (*LikeCount, error) {
 	query := fmt.Sprintf("select %s from %s where `id` = ? limit 1", likeCountRows, m.table)
 	var resp LikeCount
 	err := m.conn.QueryRowCtx(ctx, &resp, query, id)
@@ -75,7 +74,7 @@ func (m *defaultLikeCountModel) FindOne(ctx context.Context, id uint64) (*LikeCo
 	}
 }
 
-func (m *defaultLikeCountModel) FindOneByBizIdObjId(ctx context.Context, bizId string, objId uint64) (*LikeCount, error) {
+func (m *defaultLikeCountModel) FindOneByBizIdObjId(ctx context.Context, bizId int64, objId int64) (*LikeCount, error) {
 	var resp LikeCount
 	query := fmt.Sprintf("select %s from %s where `biz_id` = ? and `obj_id` = ? limit 1", likeCountRows, m.table)
 	err := m.conn.QueryRowCtx(ctx, &resp, query, bizId, objId)
@@ -90,14 +89,14 @@ func (m *defaultLikeCountModel) FindOneByBizIdObjId(ctx context.Context, bizId s
 }
 
 func (m *defaultLikeCountModel) Insert(ctx context.Context, data *LikeCount) (sql.Result, error) {
-	query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?)", m.table, likeCountRowsExpectAutoSet)
-	ret, err := m.conn.ExecCtx(ctx, query, data.BizId, data.ObjId, data.LikeNum, data.DislikeNum)
+	query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?)", m.table, likeCountRowsExpectAutoSet)
+	ret, err := m.conn.ExecCtx(ctx, query, data.BizId, data.ObjId, data.LikeNum)
 	return ret, err
 }
 
 func (m *defaultLikeCountModel) Update(ctx context.Context, newData *LikeCount) error {
 	query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, likeCountRowsWithPlaceHolder)
-	_, err := m.conn.ExecCtx(ctx, query, newData.BizId, newData.ObjId, newData.LikeNum, newData.DislikeNum, newData.Id)
+	_, err := m.conn.ExecCtx(ctx, query, newData.BizId, newData.ObjId, newData.LikeNum, newData.Id)
 	return err
 }
 

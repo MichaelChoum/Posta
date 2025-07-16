@@ -22,6 +22,12 @@ func main() {
 
 	svcCtx := svc.NewServiceContext(c)
 	ctx := context.Background()
+
+	// 聚合点赞数，定时刷新
+	l := logic.NewLikeCountLogic(ctx, svcCtx)
+	l.StartLikeCountFlusher(ctx)
+
+	// kafka异步写入点赞记录
 	serviceGroup := service.NewServiceGroup()
 	defer serviceGroup.Stop()
 

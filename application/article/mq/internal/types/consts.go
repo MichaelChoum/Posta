@@ -1,6 +1,9 @@
 package types
 
-const ArticleBizID = "article"
+const (
+	BizArticle = iota
+	BizReply
+)
 
 const (
 	// ArticleStatusPending 待审核

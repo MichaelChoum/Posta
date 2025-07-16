@@ -26,10 +26,10 @@ var (
 type (
 	likeRecordModel interface {
 		Insert(ctx context.Context, data *LikeRecord) (sql.Result, error)
-		FindOne(ctx context.Context, id uint64) (*LikeRecord, error)
-		FindOneByBizIdObjIdUserId(ctx context.Context, bizId string, objId uint64, userId uint64) (*LikeRecord, error)
+		FindOne(ctx context.Context, id int64) (*LikeRecord, error)
+		FindOneByBizIdObjIdUserId(ctx context.Context, bizId int64, objId int64, userId int64) (*LikeRecord, error)
 		Update(ctx context.Context, data *LikeRecord) error
-		Delete(ctx context.Context, id uint64) error
+		Delete(ctx context.Context, id int64) error
 	}
 
 	defaultLikeRecordModel struct {
@@ -38,11 +38,10 @@ type (
 	}
 
 	LikeRecord struct {
-		Id         uint64    `db:"id"`          // 主键ID
-		BizId      string    `db:"biz_id"`      // 业务ID
-		ObjId      uint64    `db:"obj_id"`      // 点赞对象id
-		UserId     uint64    `db:"user_id"`     // 用户ID
-		LikeType   int64     `db:"like_type"`   // 类型 0:点赞 1:点踩
+		Id         int64     `db:"id"`          // 主键ID
+		BizId      int64     `db:"biz_id"`      // 业务ID
+		ObjId      int64     `db:"obj_id"`      // 点赞对象id
+		UserId     int64     `db:"user_id"`     // 用户ID
 		CreateTime time.Time `db:"create_time"` // 创建时间
 		UpdateTime time.Time `db:"update_time"` // 最后修改时间
 	}
@@ -55,13 +54,13 @@ func newLikeRecordModel(conn sqlx.SqlConn) *defaultLikeRecordModel {
 	}
 }
 
-func (m *defaultLikeRecordModel) Delete(ctx context.Context, id uint64) error {
+func (m *defaultLikeRecordModel) Delete(ctx context.Context, id int64) error {
 	query := fmt.Sprintf("delete from %s where `id` = ?", m.table)
 	_, err := m.conn.ExecCtx(ctx, query, id)
 	return err
 }
 
-func (m *defaultLikeRecordModel) FindOne(ctx context.Context, id uint64) (*LikeRecord, error) {
+func (m *defaultLikeRecordModel) FindOne(ctx context.Context, id int64) (*LikeRecord, error) {
 	query := fmt.Sprintf("select %s from %s where `id` = ? limit 1", likeRecordRows, m.table)
 	var resp LikeRecord
 	err := m.conn.QueryRowCtx(ctx, &resp, query, id)
@@ -75,7 +74,7 @@ func (m *defaultLikeRecordModel) FindOne(ctx context.Context, id uint64) (*LikeR
 	}
 }
 
-func (m *defaultLikeRecordModel) FindOneByBizIdObjIdUserId(ctx context.Context, bizId string, objId uint64, userId uint64) (*LikeRecord, error) {
+func (m *defaultLikeRecordModel) FindOneByBizIdObjIdUserId(ctx context.Context, bizId int64, objId int64, userId int64) (*LikeRecord, error) {
 	var resp LikeRecord
 	query := fmt.Sprintf("select %s from %s where `biz_id` = ? and `obj_id` = ? and `user_id` = ? limit 1", likeRecordRows, m.table)
 	err := m.conn.QueryRowCtx(ctx, &resp, query, bizId, objId, userId)
@@ -90,14 +89,14 @@ func (m *defaultLikeRecordModel) FindOneByBizIdObjIdUserId(ctx context.Context, 
 }
 
 func (m *defaultLikeRecordModel) Insert(ctx context.Context, data *LikeRecord) (sql.Result, error) {
-	query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?)", m.table, likeRecordRowsExpectAutoSet)
-	ret, err := m.conn.ExecCtx(ctx, query, data.BizId, data.ObjId, data.UserId, data.LikeType)
+	query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?)", m.table, likeRecordRowsExpectAutoSet)
+	ret, err := m.conn.ExecCtx(ctx, query, data.BizId, data.ObjId, data.UserId)
 	return ret, err
 }
 
 func (m *defaultLikeRecordModel) Update(ctx context.Context, newData *LikeRecord) error {
 	query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, likeRecordRowsWithPlaceHolder)
-	_, err := m.conn.ExecCtx(ctx, query, newData.BizId, newData.ObjId, newData.UserId, newData.LikeType, newData.Id)
+	_, err := m.conn.ExecCtx(ctx, query, newData.BizId, newData.ObjId, newData.UserId, newData.Id)
 	return err
 }
 

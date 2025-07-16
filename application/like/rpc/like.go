@@ -7,7 +7,7 @@ import (
 	"posta/application/like/rpc/internal/config"
 	"posta/application/like/rpc/internal/server"
 	"posta/application/like/rpc/internal/svc"
-	"posta/application/like/rpc/service"
+	"posta/application/like/rpc/pb"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	zs "github.com/zeromicro/go-zero/core/service"
@@ -26,7 +26,7 @@ func main() {
 	ctx := svc.NewServiceContext(c)
 
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
-		service.RegisterLikeServer(grpcServer, server.NewLikeServer(ctx))
+		pb.RegisterLikeServer(grpcServer, server.NewLikeServer(ctx))
 
 		if c.Mode == zs.DevMode || c.Mode == zs.TestMode {
 			reflection.Register(grpcServer)

@@ -34,7 +34,7 @@ func (m *customArticleModel) withSession(session sqlx.Session) ArticleModel {
 }
 
 func (m *customArticleModel) UpdateLikeNum(ctx context.Context, id, likeNum int64) error {
-	query := fmt.Sprintf("update %s set like_num = ? where `id` = ?", m.table)
+	query := fmt.Sprintf("update " + m.table + " set like_num = ? where `id` = ?")
 	_, err := m.conn.ExecCtx(ctx, query, likeNum, id)
 	return err
 }
