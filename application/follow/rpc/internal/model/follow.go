@@ -53,6 +53,7 @@ func (m *FollowModel) FindByUserIDAndFollowedUserID(ctx context.Context, userId,
 	err := m.db.WithContext(ctx).
 		Where("user_id = ? AND followed_user_id = ?", userId, followedUserId).
 		First(&result).Error
+	// 如果是没找到的话，gorm是算成error的，但是FindByUserIDAndFollowedUserID不会返回error
 	if err == gorm.ErrRecordNotFound {
 		return nil, nil
 	}
@@ -60,17 +61,36 @@ func (m *FollowModel) FindByUserIDAndFollowedUserID(ctx context.Context, userId,
 	return &result, err
 }
 
-func (m *FollowModel) FindByUserId(ctx context.Context, userId int64, limit int) ([]*Follow, error) {
+//
+//	func (m *FollowModel) FindByUserId(ctx context.Context, userId int64, limit int) ([]*Follow, error) {
+//		var result []*Follow
+//		err := m.db.WithContext(ctx).
+//			Where("user_id = ? AND follow_status = ?", userId, 1).
+//			Order("id desc").
+//			Limit(limit).
+//			Find(&result).Error
+//
+//		return result, err
+//	}
+
+// 根据关注者的id找limit条关注记录
+func (m *FollowModel) FindByUserId(ctx context.Context, userId int64, cursorId int64, limit int) ([]*Follow, error) {
 	var result []*Follow
-	err := m.db.WithContext(ctx).
-		Where("user_id = ? AND follow_status = ?", userId, 1).
-		Order("id desc").
+	query := m.db.WithContext(ctx).
+		Where("user_id = ? AND follow_status = ?", userId, 1)
+
+	if cursorId > 0 {
+		query = query.Where("id < ?", cursorId)
+	}
+
+	err := query.Order("id desc").
 		Limit(limit).
 		Find(&result).Error
 
 	return result, err
 }
 
+// 根据关注者的id和被关注者们的id找关注记录
 func (m *FollowModel) FindByFollowedUserIds(ctx context.Context, userId int64, followedUserIds []int64) ([]*Follow, error) {
 	var result []*Follow
 	err := m.db.WithContext(ctx).

@@ -52,9 +52,14 @@ func (l *FollowLogic) Follow(in *pb.FollowRequest) (*pb.FollowResponse, error) {
 	// 注意：使用事务保证操作的原子性
 	err = l.svcCtx.DB.Transaction(func(tx *gorm.DB) error {
 		if follow != nil {
+			// 注意：gorm.DB	不是一个固定连接，而是数据库操作上下文，可能包含事务、链式操作等。
+			// 使用了Transaction，GORM 会：从连接池中取一个连接；在这个连接上调用 BEGIN; 创建新的 *gorm.DB（即 tx），它带着事务信息；
+			// 后面在 tx 上执行的操作，都会在同一个事务内；
+			// 最后 GORM 自动根据 error 判断是否 COMMIT 或 ROLLBACK。
+			// Transaction是将当前传入的事务 tx（*gorm.DB 类型）注入到 FollowModel 中，使得后续的所有数据库操作都在这个事务中进行。
 			err = model.NewFollowModel(tx).UpdateFields(l.ctx, follow.ID, map[string]interface{}{
 				"follow_status": types.FollowStatusFollow,
-			})
+			}) // map表示这是一个哈希表（字典）。string map的键（Key）是字符串。interface{} 表示map的值（Value）是任意类型（因为 interface 是Go的万能类型）
 		} else {
 			err = model.NewFollowModel(tx).Insert(l.ctx, &model.Follow{
 				UserID:         in.UserId,
@@ -92,6 +97,8 @@ func (l *FollowLogic) Follow(in *pb.FollowRequest) (*pb.FollowResponse, error) {
 			return nil, err
 		}
 		// 注意：只缓存CacheMaxFollowCount个粉丝数，毕竟每人会那么闲真的会查看全部粉丝数，比如有1000万粉丝，我们只在缓存中保留最新的CacheMaxFollowCount个就行。
+		// 这里使用的是Byrank即按排序0 表示第一个（最旧的关注对象），-(types.CacheMaxFollowCount + 1) 表示删除多余的前 N 个（注意是负数，表示从末尾往前数）
+		// -1示最后一个元素（score 最大）,-(1+types.CacheMaxFollowCount)表示倒数第(1+types.CacheMaxFollowCount)个元素
 		_, err = l.svcCtx.BizRedis.ZremrangebyrankCtx(l.ctx, userFollowKey(in.UserId), 0, -(types.CacheMaxFollowCount + 1))
 		if err != nil {
 			l.Logger.Errorf("[Follow] Redis Zremrangebyrank error: %v", err)

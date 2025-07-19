@@ -75,7 +75,7 @@ func (l *FollowListLogic) FollowList(in *pb.FollowListRequest) (*pb.FollowListRe
 			})
 		}
 	} else {
-		follows, err = l.svcCtx.FollowModel.FindByUserId(l.ctx, in.UserId, types.CacheMaxFollowCount)
+		follows, err = l.svcCtx.FollowModel.FindByUserId(l.ctx, in.UserId, in.Cursor, types.CacheMaxFollowCount)
 		if err != nil {
 			l.Logger.Errorf("[FollowList] FollowModel.FindByUserId error: %v req: %v", err, in)
 			return nil, err
@@ -113,6 +113,9 @@ func (l *FollowListLogic) FollowList(in *pb.FollowListRequest) (*pb.FollowListRe
 			}
 		}
 	}
+
+	// 查找每个关注者的关注数量行记录（关注数和粉丝数）
+	// 然后把粉丝数也放到返回的页面的结果中
 	fc, err := l.svcCtx.FollowCountModel.FindByUserIds(l.ctx, followedUserIds)
 	if err != nil {
 		l.Logger.Errorf("[FollowList] FollowCountModel.FindByUserIds error: %v followedUserIds: %v", err, followedUserIds)
