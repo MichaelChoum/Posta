@@ -1,0 +1,30 @@
+Name: followingfeedmq
+ArticleKqConsumerConf:
+  Name: article-kq-consumer
+  Brokers:
+    - 127.0.0.1:9092
+  Group: group-article
+  Topic: topic-article
+  Offset: last
+  Consumers: 1
+  Processors: 1
+FollowKqConsumerConf:
+  Name: follow-kq-consumer
+  Brokers:
+    - 127.0.0.1:9092
+  Group: group-follow
+  Topic: topic-follow
+  Offset: last
+  Consumers: 1
+  Processors: 1
+DataSourceArticle: root:2000@tcp(127.0.0.1:3306)/posta_article?parseTime=true&loc=Local
+DataSourceFollow: root:2000@tcp(127.0.0.1:3306)/posta_follow?parseTime=true&loc=Local
+DataSourceFollowingFeed: root:2000@tcp(127.0.0.1:3306)/posta_followingfeed?parseTime=true&loc=Local
+BizRedis:
+  Host: 127.0.0.1:6379
+  Pass:
+  Type: node
+CacheRedis:
+  - Host: 127.0.0.1:6379
+    Pass:
+    Type: node

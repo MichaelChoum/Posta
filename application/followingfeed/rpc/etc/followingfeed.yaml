@@ -1,0 +1,17 @@
+Name: followingfeed.rpc
+ListenOn: 0.0.0.0:8585
+Etcd:
+  Hosts:
+  - 127.0.0.1:2379
+  Key: followingfeed.rpc
+DataSourceArticle: root:2000@tcp(127.0.0.1:3306)/posta_article?parseTime=true&loc=Local
+DataSourceFollow: root:2000@tcp(127.0.0.1:3306)/posta_follow?parseTime=true&loc=Local
+DataSourceFollowingFeed: root:2000@tcp(127.0.0.1:3306)/posta_followingfeed?parseTime=true&loc=Local
+CacheRedis:
+  - Host: 127.0.0.1:6379
+    Pass:
+    Type: node
+BizRedis:
+  Host: 127.0.0.1:6379
+  Pass:
+  Type: node

@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package pb;
+option go_package="./pb";
+
+service FollowingFeed {
+  rpc GetFollowingFeed(GetFollowingRequest) returns (GetFollowingResponse);
+}
+
+message GetFollowingRequest {
+  int64 userId = 1;
+  int64 cursorSmallUp = 2; // 存储的是时间，用于游标分页
+  int64 inboxId = 3; // 用于当cursor重复时即进一步区分
+  int64 cursorBigUp = 4;
+  int64 articleId = 5;
+  int64 pageSize = 6;
+}
+
+message GetFollowingItem {
+  int64 Id = 1;
+  string title = 2;
+  string content = 3;
+  string description = 4;
+  string cover = 5;
+  int64 commentCount = 6;
+  int64 likeCount = 7;
+  int64 publishTime = 8;
+  int64 authorId = 9;
+}
+
+message GetFollowingResponse {
+  repeated GetFollowingItem followingItems = 1;
+  bool isEnd = 2;
+  int64 cursorSmallUp = 3;
+  int64 inboxId = 4;
+  int64 cursorBigUp = 5;
+  int64 articleId = 6;
+}

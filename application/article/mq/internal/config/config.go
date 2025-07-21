@@ -9,7 +9,6 @@ import (
 
 type Config struct {
 	service.ServiceConf
-
 	KqConsumerConf        kq.KqConf
 	ArticleKqConsumerConf kq.KqConf
 	Datasource            string
