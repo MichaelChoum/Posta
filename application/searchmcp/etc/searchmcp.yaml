@@ -1,0 +1,9 @@
+Name: searchmcp
+Host: 0.0.0.0
+Port: 8080
+
+Es:
+  Addresses:
+    - http://localhost:9200/
+  Username: elastic
+  Password: mLs_ER4tZJu2Hy7Tz0et

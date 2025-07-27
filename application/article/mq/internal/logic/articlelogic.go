@@ -102,6 +102,9 @@ func (l *ArticleLogic) articleOperate(msg *types.CanalArticleMsg) error {
 			Description: d.Description,
 			Status:      status,
 			LikeNum:     likNum,
+			PublishTime: d.PublishTime,
+			CreateTime:  d.CreateTime,
+			UpdateTime:  d.UpdateTime,
 		})
 	}
 	fmt.Println("esData", esData)
