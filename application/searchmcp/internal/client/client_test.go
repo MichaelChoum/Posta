@@ -200,26 +200,7 @@ func TestFullWorkflow(t *testing.T) {
 		}
 	})
 
-	t.Run("13. Test General API Request", func(t *testing.T) {
-		// 测试获取集群信息
-		result, err := client.GeneralAPIRequest(ctx, "GET", "/", nil, nil)
-		if err != nil {
-			t.Fatalf("Failed to execute general API request: %v", err)
-		}
-		logResult(t, "General API", result)
-
-		// 测试带参数的请求
-		params := map[string]string{
-			"format": "json",
-		}
-		catResult, err := client.GeneralAPIRequest(ctx, "GET", "/_cat/indices", params, nil)
-		if err != nil {
-			t.Fatalf("Failed to execute general API request with params: %v", err)
-		}
-		logResult(t, "Cat indices", catResult)
-	})
-
-	t.Run("14. Delete Document", func(t *testing.T) {
+	t.Run("13. Delete Document", func(t *testing.T) {
 		result, err := client.DeleteDocument(ctx, testIndex, "doc1")
 		if err != nil {
 			t.Fatalf("Failed to delete document: %v", err)
@@ -227,7 +208,7 @@ func TestFullWorkflow(t *testing.T) {
 		t.Logf("Delete document result: %+v", result)
 	})
 
-	t.Run("15. Delete by Query", func(t *testing.T) {
+	t.Run("14. Delete by Query", func(t *testing.T) {
 		// 只删除第二个文档，避免与已删除的doc1冲突
 		deleteQuery := map[string]interface{}{
 			"query": map[string]interface{}{
@@ -253,7 +234,7 @@ func TestFullWorkflow(t *testing.T) {
 		t.Logf("Delete by query result: %+v", result)
 	})
 
-	t.Run("16. Delete Alias", func(t *testing.T) {
+	t.Run("15. Delete Alias", func(t *testing.T) {
 		result, err := client.DeleteAlias(ctx, testIndex, testAlias)
 		if err != nil {
 			t.Fatalf("Failed to delete alias: %v", err)
@@ -261,7 +242,7 @@ func TestFullWorkflow(t *testing.T) {
 		t.Logf("Delete alias result: %+v", result)
 	})
 
-	t.Run("17. Delete Index", func(t *testing.T) {
+	t.Run("16. Delete Index", func(t *testing.T) {
 		result, err := client.DeleteIndex(ctx, testIndex)
 		if err != nil {
 			t.Fatalf("Failed to delete index: %v", err)

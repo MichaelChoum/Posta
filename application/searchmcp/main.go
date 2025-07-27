@@ -1,42 +1,42 @@
 package main
 
 import (
-	"flag"
 	"fmt"
+	"log"
 	"posta/application/searchmcp/internal/client"
 	"posta/application/searchmcp/internal/config"
+	"posta/application/searchmcp/internal/tool"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/core/logx"
+	"github.com/zeromicro/go-zero/mcp"
 )
 
-var configFile = flag.String("f", "etc/searchmcp.yaml", "the config file")
-
 func main() {
-	flag.Parse()
-
+	// 加载配置
 	var c config.Config
-	conf.MustLoad(*configFile, &c)
+	if err := conf.Load("etc/searchmcp.yaml", &c); err != nil {
+		log.Fatalf("Failed to load config: %v", err)
+	}
 
-	// 初始化ES客户端
+	// 设置日志
+	logx.DisableStat()
+	logx.Disable()
+
+	// 创建Elasticsearch客户端
 	esClient, err := client.NewESClient(c)
 	if err != nil {
-		logx.Errorf("Failed to initialize ES client: %v", err)
-		return
+		log.Fatalf("Failed to create Elasticsearch client: %v", err)
 	}
 
-	logx.Info("Search MCP Server started successfully")
+	// 创建MCP服务器
+	server := mcp.NewMcpServer(c.Mcp)
+	defer server.Stop()
 
-	// TODO: 这里后续会添加MCP服务器的启动逻辑
-	fmt.Println("ES Client initialized successfully")
+	// 注册所有工具
+	tool.RegisterAllTools(server, esClient)
 
-	// 简单测试连接
-	info, err := esClient.GetClient().Info()
-	if err != nil {
-		logx.Errorf("Failed to get ES info: %v", err)
-		return
-	}
-	defer info.Body.Close()
-
-	fmt.Printf("Connected to Elasticsearch: %s\n", info.String())
+	// 启动服务器
+	fmt.Printf("Starting Elasticsearch MCP server on %s:%d", c.Mcp.Host, c.Mcp.Port)
+	server.Start()
 }
